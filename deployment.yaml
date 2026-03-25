@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: array-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: array-app
+  template:
+    metadata:
+      labels:
+        app: array-app
+    spec:
+      containers:
+      - name: array-app
+        image: vladislava888/lab3-app:latest
+        ports:
+        - containerPort: 8080
