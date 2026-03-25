@@ -1,0 +1,41 @@
+name: CI Pipeline
+
+# Запускать при каждом пуше в ветку main (или master)
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build-test-package:
+    # указываем, что работать будет self-hosted виртуалка
+    runs-on: self-hosted
+
+    steps:
+      # Копируем код из репозитория в папку раннера
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Аналог stage: build
+      - name: Build Stage
+        run: |
+          chmod +x cicd/build.sh
+          ./cicd/build.sh
+
+      # Аналог stage: test
+      - name: Test Stage
+        run: |
+          chmod +x cicd/test.sh
+          ./cicd/test.sh
+
+      # Аналог stage: package
+      - name: Package Stage
+        run: |
+          chmod +x cicd/package.sh
+          ./cicd/package.sh
+
+      # Сохраняем готовый .deb пакет, чтобы его можно было скачать с сайта GitHub
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: debian-package
+          path: "*.deb"
