@@ -10,7 +10,6 @@ job_build:
   artifacts:
     paths:
       - src/app
-    expire_in: 1 hour
 
 job_test:
   stage: test
