@@ -1,9 +1,6 @@
 #!/bin/bash
-
 chmod +x ./src/app
-./src/app
-
-if [ $? -eq 0 ]; then
+if ./src/app; then
     echo "Exited without errors"
     exit 0
 else
