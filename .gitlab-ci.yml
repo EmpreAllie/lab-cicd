@@ -1,0 +1,26 @@
+stages:
+  - build
+  - test
+  - package
+
+job_build:
+  stage: build
+  script:
+    - ./cicd/build.sh
+  artifacts:
+    paths:
+      - src/app
+    expire_in: 1 hour
+
+job_test:
+  stage: test
+  script:
+    - ./cicd/test.sh
+
+job_package:
+  stage: package
+  script:
+    - ./cicd/package.sh
+  artifacts:
+    paths:
+      - "*.deb"

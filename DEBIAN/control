@@ -1,0 +1,8 @@
+Package: pogorelov-lab
+Version: 1.0
+Section: utils
+Priority: optional
+Architecture: amd64
+Maintainer: zlp2
+Depends: g++, make
+Description: MFCLWAP
