@@ -1,34 +1,20 @@
-name: Deploy to Docker Hub
-
-on:
-  push:
-    branches: [ main, master ]
-
+name: full_pipeline
+on: [push]
 jobs:
-  full_pipeline:
-    runs-on: self-hosted  # виртуалка
-
+  deploy:
+    runs-on: self-hosted
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Build and Test
-        run: |
-          chmod +x cicd/build.sh
-          chmod +x cicd/test.sh
-          ./cicd/build.sh
-          ./cicd/test.sh
-
-      - name: Build Package
-        run: |
-          chmod +x cicd/package.sh
-          ./cicd/package.sh
+      - uses: actions/checkout@v3
 
       - name: Login to DockerHub
-        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and Push Docker Image
-        run: |
-          # Имя образа: логин/название_лабы:версия
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/lab3-app:latest .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/lab3-app:latest
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lab3-app:latest
